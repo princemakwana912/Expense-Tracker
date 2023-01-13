@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+        crossorigin="anonymous"></script>
+    <title>Expense Tracker</title>
+</head>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    body {
+        color: rgb(13, 236, 32);
+        margin: 0px;
+        padding: 0px;
+        background: url('img/bg.webp');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+</style>
+
+<body>
+    <header class="header">
+        <div class="left">
+            <img src="img/logo.png">
+            <div>Expense Tracker</div>
+        </div>
+        <div class="mid">
+            <ul class="navbar">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="expense.html">Expense List</a></li>
+                <li><a href="category.html">Category List</a></li>
+                <li><a href="#">Total Expense</a></li>
+                <li><a href="#">Total Limit</a></li>
+            </ul>
+        </div>
+        <div class="right">
+            <button class="btn">Contact Us</button>
+            <button class="btn">Email</button>
+        </div>
+
+        <body>
+            <div class="container" style="padding-top: 30px;">
+                <div class="body" id="category">
+
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Limit</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cat-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="container" style="padding-top: 30px;">
+                <div class="body" id="expense">
+                    <table class="table table-dark table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">category</th>
+                                <th scope="col">amount</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exp-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <script>
+                let url = "http://localhost:5036/api";
+                //Get all Categories in table
+                fetch(url + "/Categories")
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data => {
+                        let tableData = "";
+                        data.map((values) => {
+                            tableData += `<tr>
+        <th>${values.name}</th>
+        <th>${values.limit}</th>
+        <th class="actions"><i class="fa-solid fa-pen-to-square" id="cat-edit" style="color: white; cursor: pointer;"></i>
+          <i class="fa-solid fa-trash" style="cursor: pointer;"></i></th></tr>`;
+                        });
+                        document.getElementById("cat-table").innerHTML = tableData;
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+
+                // Get all transactions in table
+                fetch(url + "/Transactions")
+                    .then(res => {
+                        return res.json();
+                    })
+                    .then(data => {
+                        let tableData = "";
+                        data.map((values) => {
+                            tableData += `<tr>
+        <th>${values.expName}</th>
+        <th>${values.expDesc}</th>
+        <th>${values.category}</th>
+        <th>${values.amount}</th>
+        <th>${values.date}</th>
+<th class="actions"><i class="fa-solid fa-pen-to-square" style="color: white; cursor: pointer;"></i>
+          <i class="fa-solid fa-trash" style="cursor: pointer;"></i></th></tr>`;
+                        });
+                        document.getElementById("exp-table").innerHTML = tableData;
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+            </script>
+        </body>
+
+</html>
